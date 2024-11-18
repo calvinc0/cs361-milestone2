@@ -1,4 +1,4 @@
-# cs361-milestone2
+# Communication Contract
 
 How to REQUEST data from the microservice?
 
