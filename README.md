@@ -2,31 +2,20 @@
 
 How to REQUEST data from the microservice?
 
-Endpoint URL: http://localhost:5000/analyze_expense
+Endpoint URL: http://localhost:5000/launch_browser
 Method: POST
 Content-Type: application/json
 
 Request Structure
-To interact with the microservice, you must send a JSON object with the following structure:
+The microservice expects a JSON object with the following fields:
 
-- user_id (string): Unique identifier for the user.
-- month (string): The month for which data analysis is requested, in "MM-YYYY" format.
-- expenses (array of objects): List of expense objects, where each object contains:
-  - category (string): The category of the expense (e.g., "Food", "Transport").
-  - amount (number): The amount spent for that category.
+- command (string): The command to execute (e.g., "open_url").
+- url (string): The URL to be opened.
 
 Example request:
-POST /analyze_expense HTTP/1.1
-Host: localhost:5000
-Content-Type: application/json
-
 {
-  "user_id": "12345",
-  "month": "11-2024",
-  "expenses": [
-    {"category": "Food", "amount": 200},
-    {"category": "Transport", "amount": 50}
-  ]
+  "command": "open_url",
+  "url": "https://www.example.com"
 }
 
 How to RECEIVE data from the microservice?
@@ -34,42 +23,36 @@ How to RECEIVE data from the microservice?
 The microservice responds with a JSON object containing the results of the expense analysis.
 
 Response Structure
-- status (string): Indicates the success or failure of the request (e.g., "success", "error").
-- categorized_expenses (object): A breakdown of total expenses by category.
-- monthly_total (number): The total expenses for the specified month.
-- recommendations (array of strings): Recommendations for optimizing spending.
+- status (string): Indicates the status of the operation (e.g., "success" or "error").
+- message (string): A message describing the result of the request.
 
 Example response:
 {
   "status": "success",
-  "categorized_expenses": {
-    "Food": 200,
-    "Transport": 50
-  },
-  "monthly_total": 250,
-  "recommendations": [
-    "Consider reducing spending on dining out.",
-    "Explore using public transport to save on fuel costs."
-  ]
+  "message": "Browser opened to https://www.example.com"
 }
 
 UML sequence diagram:
 
 +-------------------+              +-----------------------------+
-| Calling Program   |              | Expense Analysis Microservice|
+| Calling Program   |              | Browser Launcher Microservice|
 +-------------------+              +-----------------------------+
           |                                      |
-          |      POST /analyze_expense           |
+          |     POST /launch_browser             |
           |------------------------------------->|
           |                                      |
-          |    Validate and Process Request      |
+          |   Validate Request (Check command)   |
+          |------------------------------------->|
           |                                      |
-          |   Categorize Expenses, Summarize     |
-          |   Generate Recommendations           |
+          |  Open Web Browser with URL (if valid)|
+          |------------------------------------->|
           |                                      |
-          |             Response                 |
+          |        Prepare Response              |
+          |------------------------------------->|
+          |                                      |
+          |       Return JSON Response           |
           |<-------------------------------------|
-          |     JSON Response (categorized       |
-          |     expenses, monthly total, etc.)   |
+          |                                      |
+          |   Process and Display Response       |
           |                                      |
 
