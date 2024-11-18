@@ -20,7 +20,7 @@ Example request:
 
 How to RECEIVE data from the microservice?
 
-The microservice responds with a JSON object containing the results of the expense analysis.
+The microservice responds with a JSON object containing the result of the operation.
 
 Response Structure
 - status (string): Indicates the status of the operation (e.g., "success" or "error").
